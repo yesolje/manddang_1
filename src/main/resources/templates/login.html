@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>로그인/로그아웃</h1>
+    <form th:action="@{/login_proc}" method="post">
+        <input type="text" id="username" name="username"  placeholder="로그인아이디">
+        <input type="password" id="password" name="password"  placeholder="로그인비밀번호">
+        <button type="submit" id="doLogin">로그인하기</button>
+    </form>
+
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+
+</script>
+</body>
+</html>

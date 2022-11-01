@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<h1>회원가입</h1>
+<input type="text" id="userId" name="userId"  placeholder="이름">
+<input type="text" id="userPwd" name="userPwd"  placeholder="비밀번호">
+<button type="submit" id="save">제출</button>
+
+
+
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+    $('#save').click(function () {
+        var jsonData = JSON.stringify({
+            userId: $('#userId').val(),
+            userPwd: $('#userPwd').val()
+        });
+        $.ajax({
+            url: "/user/join",
+            method: "POST",
+            data: jsonData,
+            contentType: 'application/json;charset=utf-8',
+            dataType: "json",
+            success: function(){
+                alert('제출 성공! :)');
+                location.href = '/main';
+            },
+            error: function(request, status, error){
+                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                alert('에러발생');
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>메인페이지입니다</h1>
+    <!--회원일 경우 &&님 환영합니다 | 로그아웃
+    비회원일 경우 로그인 | 회원가입 -->
+    <th:block th:if="${info == 'none'}">
+        <div>비로그인상태</div>
+        <form method="get" action="/login">
+            <button type="submit">로그인</button>
+        </form>
+        <form method="get" action="/join">
+            <button type="submit">회원가입</button>
+        </form>
+    </th:block>
+
+    <th:block th:unless="${info == 'none'}">
+        <div>로그인상태</div>
+        <div th:text="${info}"></div> 님 환영합니다
+        <form method="post" action="/logout">
+            <button type="submit">로그아웃하기</button>
+        </form>
+    </th:block>
+
+</body>
+</html>
