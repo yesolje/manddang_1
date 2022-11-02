@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers( "/main/user","/main","/login","/join","/login_success","/resources/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
+                .antMatchers( "/main/user","/main","/login","/join","/login_success","/resources/static/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
                 // USER, ADMIN 접근 허용 - 이거 403 계속 떠서 못쓰는데 나도 미치겠음
                 //.antMatchers("/login_success").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
                 //.antMatchers("/login_success").hasRole("ADMIN")
