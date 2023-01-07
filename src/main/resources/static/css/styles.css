@@ -102,6 +102,10 @@
 .dropdown-warning{
     color: red !important ;
 }
+.map{
+    height:380px;
+    width:100%;
+}
 /*custom end*/
 body {
   margin: 0;
