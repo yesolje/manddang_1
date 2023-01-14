@@ -69,8 +69,14 @@ public class IndexController {
     public String loginFail() {
         return "login_fail";
     }
-    
 
+    //관리자 테스트페이지 display
+    @RequestMapping("/adminManage")
+    public ModelAndView goAdminManage(HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("adminManage");
+        return mav;
+    }
 
     
 }
