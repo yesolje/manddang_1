@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +14,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+//지역 등록 겸 테스트를 위한 임시 컨트롤러 페이지
 @RestController
 @RequiredArgsConstructor
 public class AreaController {
@@ -32,7 +35,6 @@ public class AreaController {
     //지역코드호출(테스트용)
     @RequestMapping(value = "/manage/getArea", produces ="application/json")
     public ResponseEntity<?> getArea(@RequestBody String sido_cd) throws IOException {
-        System.out.println("@@@@@@"+sido_cd);
         StringBuffer result = new StringBuffer();
         String strResult = "";
         String code="F211229279";
@@ -67,10 +69,37 @@ public class AreaController {
             rd.close();
             conn.disconnect();
             strResult = result.toString();
+            String result1 = strResult.replaceAll("\\s", "");
+            String result2 = result1.replaceAll("\"", "\\\"");
+
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(result2);
+
+
+            JSONObject jsonMain = (JSONObject)obj;
+            Object obj2 =jsonMain.get("RESULT");
+
+            JSONObject jsonResult = (JSONObject)obj2;
+            Object obj3 =jsonResult.get("OIL");
+
+            JSONArray jsonArr = (JSONArray)obj3;
+            if (jsonArr.size() > 0){
+                for(int i=0; i<jsonArr.size(); i++){
+                    JSONObject jsonObj = (JSONObject)jsonArr.get(i);
+                    Area area = new Area();
+                    area.setAreaCd((String)jsonObj.get("AREA_CD"));
+                    area.setAreaNm((String)jsonObj.get("AREA_NM"));
+                    //String resultString = AreaService.save(area,null);
+                }
+            }
         } catch ( Exception e ){
             e.printStackTrace();
         }
+
+
         ResponseEntity res = new ResponseEntity<>(strResult, HttpStatus.OK);
+
+
         return res;
     }
 
