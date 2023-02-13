@@ -7,12 +7,12 @@ import com.yesol.manddang_1.vo.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,4 +34,17 @@ public class AreaService {
         return result;
     }
 
+    public List findAll() {
+        String result = null;
+        ObjectMapper mapper = new ObjectMapper();
+        List list = new ArrayList();
+        try {
+            list = areaRepository.findAll();
+            System.out.println(list.toString());
+
+        } catch(Exception e){
+            logger.error("AreaService.findAll ERROR :{}",e);
+        }
+        return list;
+    }
 }

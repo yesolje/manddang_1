@@ -7,12 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -24,17 +24,17 @@ public class AreaController {
 
     private final AreaService AreaService;
 
-    //지역코드등록(최초1번)
-    @RequestMapping(value = "/manage/createArea", method = RequestMethod.POST)
-    public ResponseEntity<?> createArea(@RequestBody Area area, HttpSession sess){
-        String resultString = AreaService.save(area, sess);
-        ResponseEntity res = new ResponseEntity<>(resultString, HttpStatus.CREATED);
+    //지역코드호출(최초1번)
+    @RequestMapping(value = "/manage/getArea", produces ="application/json")
+    public ResponseEntity<?> getArea() {
+        List resultList = AreaService.findAll();
+        ResponseEntity res = new ResponseEntity<>(resultList, HttpStatus.CREATED);
         return res;
     }
 
-    //지역코드호출(테스트용)
-    @RequestMapping(value = "/manage/getArea", produces ="application/json")
-    public ResponseEntity<?> getArea(@RequestBody String sido_cd) throws IOException {
+    //지역코드호출및 등록(테스트용)
+    @RequestMapping(value = "/manage/createArea", produces ="application/json")
+    public ResponseEntity<?> createArea(@RequestBody String sido_cd) throws IOException {
         StringBuffer result = new StringBuffer();
         String strResult = "";
         String code="F211229279";

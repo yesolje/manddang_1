@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", function(){
     main.initMapLoad();
     main.initTabulatorLoad();
     common.loadLocationSelectBox();
+
+     fetch("/manage/getArea")
+         .then((response) => response.json())
+         .then((data) => console.log(data));
+
 });
 
 var main={
