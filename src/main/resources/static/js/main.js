@@ -1,7 +1,6 @@
 /**-----------------------------------------------------------------------------------------
  * Description : main.js
  **----------------------------------------------------------------------------------------*/
-
 /********************************************************************************
  * Global Variable : 전역변수 정의
  ********************************************************************************/
@@ -12,22 +11,20 @@
  	{id:4, name:"DDD주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
  	{id:5, name:"EEE주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
  ];
-
+ //var AREA;
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
+    //AREA = await common.getAreaFetch();
+    //console.log(AREA);
+
     main.initHeaderLoad();
     main.initEvent();
     main.initMapLoad();
     main.initTabulatorLoad();
     common.loadLocationSelectBox();
-
-     fetch("/manage/getArea")
-         .then((response) => response.json())
-         .then((data) => console.log(data));
-
 });
 
 var main={
@@ -43,9 +40,13 @@ var main={
         //          document.getElementById('joinForm').submit();
         // });
         document.getElementById('searchSido').addEventListener("change", function(event){
-            //alert(document.getElementById('searchSido').value);
             common.loadLocationSelectBox(document.getElementById('searchSido').value);
         });
+        document.getElementById('searchGungu').addEventListener("change", function(event){
+            var testData;
+            //testData = await common.getOilPriceFetch();
+        });
+
     },
     initMapLoad:function(){
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스

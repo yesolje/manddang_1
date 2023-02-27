@@ -3,9 +3,14 @@ package com.yesol.manddang_1.controller;
 import com.yesol.manddang_1.service.AreaService;
 import com.yesol.manddang_1.vo.Area;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,38 +19,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
 //지역 등록 겸 테스트를 위한 임시 컨트롤러 페이지
 @RestController
 @RequiredArgsConstructor
-public class AreaController {
-
-    private final AreaService AreaService;
-
-    //지역코드호출
-    @RequestMapping(value = "/manage/getArea", produces ="application/json")
-    public ResponseEntity<?> getArea() {
-        List resultList = AreaService.findAll();
-        ResponseEntity res = new ResponseEntity<>(resultList, HttpStatus.CREATED);
-        return res;
-    }
+public class OilPriceController {
 
     //지역코드호출및 등록(테스트용)
-    @RequestMapping(value = "/manage/createArea", produces ="application/json")
-    public ResponseEntity<?> createArea(@RequestBody String sido_cd) throws IOException {
+    @RequestMapping(value = "/search/getOilPrice", produces ="application/json")
+    public ResponseEntity<?> createArea(@RequestBody Object filter) throws IOException {
         StringBuffer result = new StringBuffer();
         String strResult = "";
         String code="F211229279";
+        System.out.println("#######리퀘스트"+filter);
         try {
             // URL 설정
-            StringBuilder urlBuilder = new StringBuilder("http://www.opinet.co.kr/api/areaCode.do");
+            StringBuilder urlBuilder = new StringBuilder("http://www.opinet.co.kr/api/lowTop10.do");
 
             // search 변수는 인코딩이 필요하다고 했으므로 그 부분만 인코딩
             urlBuilder.append("?out=json");
             urlBuilder.append("&code=" + code);
-            urlBuilder.append("&area="+sido_cd);
+            urlBuilder.append("&prodcd=");
+            urlBuilder.append("&area=");
+            urlBuilder.append("&cnt=20");
 
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();

@@ -127,13 +127,14 @@ const common = {
                 sidoOption.value = LOCATION_DATA[i].sido;
                 searchSido.options.add(sidoOption);
             };
+
             searchSido[0].selected = true;
             gunguOption.text = "전체";
             gunguOption.value = "";
             searchGungu.options.add(gunguOption);
             searchGungu[0].selected = true;
         }else{
-            console.log(sido);
+            //console.log(sido);
             var searchGungu = document.querySelector("#searchGungu");
             var gunguOption = document.createElement("option");
             searchGungu.options.length=0;
@@ -150,4 +151,28 @@ const common = {
         }
     },
 
+    //비동기 Area 데이터 호출
+    //사용방법 : await common.getAreaFetch();
+    getAreaFetch:function(){
+        try{
+            const response = fetch("/manage/getArea");
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("지역정보 수신중 에러 발생",error);
+        }
+    },
+
+    //비동기 유가정보 데이터 호출
+    //사용방법 :
+    getOilPriceFetch:function(area,oil){
+        let filter = {
+            sido_cd:area,
+            prod_cd:oil}
+        try{
+            const response = fetch("/search/getOilPrice",{method:"POST",body:filter});
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("유가정보 수신중 에러 발생",error);
+        }
+    }
 }

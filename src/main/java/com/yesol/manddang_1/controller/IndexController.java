@@ -1,5 +1,6 @@
 package com.yesol.manddang_1.controller;
 
+import com.yesol.manddang_1.service.AreaService;
 import com.yesol.manddang_1.service.UserService;
 import com.yesol.manddang_1.vo.User;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
