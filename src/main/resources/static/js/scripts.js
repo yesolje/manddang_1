@@ -153,6 +153,7 @@ const common = {
 
     //비동기 Area 데이터 호출
     //사용방법 : await common.getAreaFetch();
+    //사용하지 않고 예시로만 남겨놓을 것
     getAreaFetch:function(){
         try{
             const response = fetch("/manage/getArea");
@@ -167,9 +168,15 @@ const common = {
     getOilPriceFetch:function(area,oil){
         let filter = {
             sido_cd:area,
-            prod_cd:oil}
+            prod_cd:oil
+            }
+        console.log(filter);
         try{
-            const response = fetch("/search/getOilPrice",{method:"POST",body:filter});
+            const response = fetch("/search/getOilPrice",{
+                method:"POST",
+                body:JSON.stringify(filter),
+                headers:{'Content-Type': 'application/json'},
+                });
             return response.then(res=>res.json());
         }catch(error){
             console.log("유가정보 수신중 에러 발생",error);

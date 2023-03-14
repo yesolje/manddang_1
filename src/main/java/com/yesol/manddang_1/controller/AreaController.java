@@ -89,7 +89,8 @@ public class AreaController {
                     Area area = new Area();
                     area.setAreaCd((String)jsonObj.get("AREA_CD"));
                     area.setAreaNm((String)jsonObj.get("AREA_NM"));
-                    //String resultString = AreaService.save(area,null);
+                    //하기를 켜놓으면 DB 저장 작업이 이루어짐
+                    //String resultString = AreaService.save(area,null); 
                 }
             }
         } catch ( Exception e ){
