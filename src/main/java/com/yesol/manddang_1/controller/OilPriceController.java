@@ -78,7 +78,7 @@ public class OilPriceController {
             System.out.println("데이터도착:"+strResult);
             String result1 = strResult.replaceAll("\\s", "");
             String result2 = result1.replaceAll("\"", "\\\"");
-            
+
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(result2);
 
@@ -91,7 +91,7 @@ public class OilPriceController {
 
             JSONArray jsonArr = (JSONArray)obj3;
             
-            System.out.println("1차 가공결과"+jsonArr); //이거 띄어쓰기를 다 없앱버리는데유
+            System.out.println("1차 가공결과"+jsonArr);
 
         } catch ( Exception e ){
             e.printStackTrace();

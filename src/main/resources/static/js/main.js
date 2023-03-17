@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
     //화면 로드될때 유가 최초 로드
     oilPriceData = await common.getOilPriceFetch('','B027');
+    console.log(oilPriceData);
     main.initHeaderLoad();
     main.initEvent();
     main.initMapLoad();
