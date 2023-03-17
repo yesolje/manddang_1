@@ -1,6 +1,7 @@
 package com.yesol.manddang_1.controller;
 
 import com.yesol.manddang_1.service.AreaService;
+import com.yesol.manddang_1.util.OpnetApiUtil;
 import com.yesol.manddang_1.vo.Area;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,10 +35,12 @@ public class AreaController {
 
     //지역코드호출및 등록(테스트용)
     @RequestMapping(value = "/manage/createArea", produces ="application/json")
-    public ResponseEntity<?> createArea(@RequestBody String sido_cd) throws IOException {
+    public ResponseEntity<?> createArea(@RequestBody String sido_cd) {
         StringBuffer result = new StringBuffer();
         String strResult = "";
         String code="F211229279";
+        OpnetApiUtil op = new OpnetApiUtil();
+
         try {
             // URL 설정
             StringBuilder urlBuilder = new StringBuilder("http://www.opinet.co.kr/api/areaCode.do");
@@ -48,27 +51,11 @@ public class AreaController {
             urlBuilder.append("&area="+sido_cd);
 
             URL url = new URL(urlBuilder.toString());
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-
-            // Request 형식 설정
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json");
-
-            // 응답 데이터 받아오기
-            BufferedReader rd;
-            if(conn.getResponseCode() >= 200 & conn.getResponseCode() <= 300) {
-                rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            } else {
-                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-            }
-
-            String line;
-            while((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-            rd.close();
-            conn.disconnect();
-            strResult = result.toString();
+            
+            //데이터 호출 성공
+            strResult = op.ApiDataCall(url);
+            
+            //하기 가공 작업은 DB 저장용
             String result1 = strResult.replaceAll("\\s", "");
             String result2 = result1.replaceAll("\"", "\\\"");
 

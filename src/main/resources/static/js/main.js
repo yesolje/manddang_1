@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", async function(){
     //화면 로드될때 유가 최초 로드
     oilPriceData = await common.getOilPriceFetch('','B027');
     console.log(oilPriceData);
+    console.log(oilPriceData.RESULT.OIL);
+    sampledata = oilPriceData.RESULT.OIL;
+
+
     main.initHeaderLoad();
     main.initEvent();
     main.initMapLoad();
@@ -67,11 +71,17 @@ var main={
         var table = new Tabulator("#listTabulator", {
          	data:sampledata, //assign data to table
          	layout:"fitColumns", //fit columns to width of table (optional)
+         	pagination:true, //enable.
+            paginationSize:5, // this option can take any positive integer value
          	columns:[ //Define Table Columns
-        	 	{title:"주유소명", field:"name", width: "20%"},
-        	 	{title:"위치", field:"location"},
-        	 	{title:"휘발유", field:"priceGasoline", width: "15%"},
-        	 	{title:"경유", field:"priceDiesel", width: "15%"},
+        	 	{title:"주유소ID", field:"UNI_ID",     visible:false},
+        	 	{title:"주유소명",  field:"OS_NM",      tooltip:true, width: "30%"},
+        	 	{title:"브랜드",   field:"POLL_DIV_CD",tooltip:true, width: "15%"},
+        	 	{title:"가격(원)", field:"PRICE",      width: "15%"},
+        	 	{title:"주소",    field:"NEW_ADR",    tooltip:true,width: "40%"},
+                {title:"구주소",   field:"VAN_ADR",    visible:false},
+                {title:"GIS X좌표", field:"GIS_X_COOR", visible:false},
+                {title:"GIS Y좌표", field:"GIS_Y_COOR", visible:false},
          	],
         });
     },
