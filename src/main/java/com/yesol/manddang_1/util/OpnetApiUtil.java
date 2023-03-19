@@ -38,4 +38,13 @@ public class OpnetApiUtil {
 
         return strResult;
     }
+    
+    // 오피넷의 데이터에서 브랜드 코드를 브랜드 명으로 바꿔준다
+    // 매개변수 - string (오피넷 데이터)
+    // 산출물 - string
+    public String replaceBrandCdToName(String apiData){
+        //enum 순회하면서... 브랜드 네임으로 바꿀 수 있는 함수로 만들기
+        return null;
+    }
+    
 }
