@@ -43,8 +43,17 @@ public class OpnetApiUtil {
     // 매개변수 - string (오피넷 데이터)
     // 산출물 - string
     public String replaceBrandCdToName(String apiData){
+
+        String splite1 = apiData.substring(0,67);
+        String splite2 = apiData.substring(67);
         //enum 순회하면서... 브랜드 네임으로 바꿀 수 있는 함수로 만들기
-        return null;
+        BrandCode brandCodeList[] = BrandCode.values();
+        for(BrandCode b: brandCodeList){
+            splite2 = splite2.replaceAll(b.toString(),b.getBrandName());
+        }
+        apiData = splite1 + splite2;
+
+        return apiData;
     }
     
 }

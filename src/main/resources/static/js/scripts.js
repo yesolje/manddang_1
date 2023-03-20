@@ -129,7 +129,7 @@ const common = {
             };
 
             searchSido[0].selected = true;
-            gunguOption.text = "전체";
+            gunguOption.text = "==시도를 먼저 선택해 주세요==";
             gunguOption.value = "";
             searchGungu.options.add(gunguOption);
             searchGungu[0].selected = true;
@@ -165,12 +165,12 @@ const common = {
 
     //비동기 유가정보 데이터 호출
     //사용방법 :
-    getOilPriceFetch:function(area,oil){
+    getOilPriceFetch:function(sido,gungu,oil){
         let filter = {
-            sido_cd:area,
+            sido_nm:sido,
+            area_nm:gungu,
             prod_cd:oil
             }
-        console.log(filter);
         try{
             const response = fetch("/search/getOilPrice",{
                 method:"POST",

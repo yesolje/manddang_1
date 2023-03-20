@@ -4,38 +4,33 @@
 /********************************************************************************
  * Global Variable : 전역변수 정의
  ********************************************************************************/
- var sampledata = [ //자료 불러오는 대로 삭제할 예정
- 	{id:1, name:"AAA주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
- 	{id:2, name:"BBB주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
- 	{id:3, name:"CCC주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
- 	{id:4, name:"DDD주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
- 	{id:5, name:"EEE주유소", location:"경기도 성남시 분당구 동판교로 212", priceGasoline:"1780", priceDiesel:"1230"},
- ];
- //var AREA;
+
+ //새로고침할때마다 업데이트되는 유가 데이터
  var oilPriceData;
+
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
 
 document.addEventListener("DOMContentLoaded", async function(){
-    //AREA = await common.getAreaFetch();
-    //console.log(AREA);
+    main.initHeaderLoad();
+    main.initEvent();
+    main.initMapLoad();
+    common.loadLocationSelectBox();
+
+    //test - 현재 선택되있는 검색조건
+    console.log(document.querySelector("#searchSido").value);
+    console.log(document.querySelector("#searchGungu").value);
+    console.log(document.querySelector('input[name="priceSort"]:checked').value);
 
     //나중에 유종별로 검색할때 이거 참고
     //var selectedOil = document.querySelector('input[name="priceSort"]:checked').value;
 
-    //화면 로드될때 유가 최초 로드
-    oilPriceData = await common.getOilPriceFetch('','B027');
-    console.log(oilPriceData);
-    console.log(oilPriceData.RESULT.OIL);
-    sampledata = oilPriceData.RESULT.OIL;
-
-
-    main.initHeaderLoad();
-    main.initEvent();
-    main.initMapLoad();
+    //화면 로드될때 유가 최초 로드 후 tabulator에 입히기
+    oilPriceData = await common.getOilPriceFetch('전체','','B027');
+    oilPriceData = oilPriceData.RESULT.OIL;
     main.initTabulatorLoad();
-    common.loadLocationSelectBox();
+
 });
 
 var main={
@@ -69,7 +64,7 @@ var main={
     },
     initTabulatorLoad:function(){
         var table = new Tabulator("#listTabulator", {
-         	data:sampledata, //assign data to table
+         	data:oilPriceData, //assign data to table
          	layout:"fitColumns", //fit columns to width of table (optional)
          	pagination:true, //enable.
             paginationSize:5, // this option can take any positive integer value

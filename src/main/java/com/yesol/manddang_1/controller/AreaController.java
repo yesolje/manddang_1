@@ -8,10 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
@@ -87,6 +83,10 @@ public class AreaController {
         return res;
     }
 
-
+    //sido_nm으로 sido_cd 찾아오기
+    public String getSidoCdBySidoNm(String sido_nm) {
+        String sido_cd = AreaService.findSidoCdBySidoNm(sido_nm);
+        return null;
+    }
     
 }

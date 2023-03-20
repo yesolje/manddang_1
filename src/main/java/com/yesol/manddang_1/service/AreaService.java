@@ -47,4 +47,16 @@ public class AreaService {
         }
         return list;
     }
+
+    public String findSidoCdBySidoNm(String sido_nm) {
+        String sido_cd = null;
+        try {
+            //sido_cd = areaRepository.findAll(); -> 여기에서 쿼리 넣어줘야 함
+            System.out.println(sido_cd);
+
+        } catch(Exception e){
+            logger.error("AreaService.findSidoCdBySidoNm ERROR :{}",e);
+        }
+        return null;
+    }
 }
