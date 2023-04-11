@@ -46,10 +46,12 @@ var main={
             common.loadLocationSelectBox(document.getElementById('searchSido').value);
         });
         document.getElementById('searchGungu').addEventListener("change", function(event){
-            var testData;
-            //var selectedArea = document.querySelector('#searchGungu').value;
-            //console.log(selectedArea);
-            //testData = await common.getOilPriceFetch();
+            var sortedOilPriceData;
+            var sido = document.querySelector('#searchSido').value;
+            var gungu = document.querySelector('#searchGungu').value;
+            var oil = document.querySelector('input[name="priceSort"]:checked').value;
+            sortedOilPriceData = common.getOilPriceFetch(sido,gungu,oil);
+            console.log(sortedOilPriceData);
         });
 
     },

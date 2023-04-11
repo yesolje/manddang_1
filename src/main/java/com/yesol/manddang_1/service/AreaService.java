@@ -48,15 +48,26 @@ public class AreaService {
         return list;
     }
 
-    public String findSidoCdBySidoNm(String sido_nm) {
-        String sido_cd = null;
+    public String findSidoCdBySidoNm(String sido_nm, String area_nm) {
+        String code = null;
         try {
-            //sido_cd = areaRepository.findAll(); -> 여기에서 쿼리 넣어줘야 함
-            System.out.println(sido_cd);
+            //step1 - sido_nm으로 sido_cd 찾아오기
+            //step2 -
+            //      조건 1 - area_nm이 전체면 흘려보내기
+            //          2 - area_nm이 이름이 있으면 sido_cd 필터 걸어서 DB에서 area_cd 찾아오기
+            System.out.println("###입력sido:"+sido_nm);
+            System.out.println("###입력area:"+area_nm);
+            code = areaRepository.selectSidoCdBySidoNm(sido_nm); //-> 여기에서 쿼리 넣어줘야 함
+            //todo : area_nm 전체가 있는 값으로 인식이 안되는듯 경기 전체를 눌렀을 때 change 로 인식되지 않음 프론트단에서
+            if(!area_nm.equals("전체")){
+                code = areaRepository.selectAreaCdByAreaNm(code,area_nm);
+            }
+
+            System.out.println("###검색결과코드:"+code);
 
         } catch(Exception e){
             logger.error("AreaService.findSidoCdBySidoNm ERROR :{}",e);
         }
-        return null;
+        return code;
     }
 }

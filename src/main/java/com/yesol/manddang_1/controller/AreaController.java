@@ -84,8 +84,8 @@ public class AreaController {
     }
 
     //sido_nm으로 sido_cd 찾아오기
-    public String getSidoCdBySidoNm(String sido_nm) {
-        String sido_cd = AreaService.findSidoCdBySidoNm(sido_nm);
+    public String getSidoCdBySidoNm(String sido_nm, String area_nm) {
+        String sido_cd = AreaService.findSidoCdBySidoNm(sido_nm,area_nm);
         return null;
     }
     

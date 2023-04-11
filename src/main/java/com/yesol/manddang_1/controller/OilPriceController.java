@@ -28,22 +28,19 @@ public class OilPriceController {
         String sido_nm = filterMap.get("sido_nm");
         String area_nm = filterMap.get("area_nm");
         String prod_cd = filterMap.get("prod_cd");
-
         try {
             // URL 설정
             StringBuilder urlBuilder = new StringBuilder("http://www.opinet.co.kr/api/lowTop10.do");
-            if(sido_nm =="전체"){
+            if(sido_nm.equals("전체")){
                 urlBuilder.append("?out=json");
                 urlBuilder.append("&code=" + code);
                 urlBuilder.append("&prodcd="+prod_cd);
                 urlBuilder.append("&cnt=20");
             }else{
                 //TODO:지역필터 걸었을 경우 지역명에 따라 DB 정보에서 코드 찾아오는 작업 필요함
-                //step1 - sido_nm으로 sido_cd 찾아오기
-                //step2 - 
-                //      조건 1 - area_nm이 전체면 흘려보내기
-                //          2 - area_nm이 이름이 있으면 sido_cd 필터 걸어서 DB에서 area_cd 찾아오기
-                String siso_cd = areaController.getSidoCdBySidoNm(sido_nm);
+
+                String sido_cd = areaController.getSidoCdBySidoNm(sido_nm,area_nm);
+
                 urlBuilder.append("?out=json");
                 urlBuilder.append("&code=" + code);
                 urlBuilder.append("&prodcd="+prod_cd);
