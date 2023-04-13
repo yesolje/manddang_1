@@ -58,7 +58,6 @@ public class AreaService {
             System.out.println("###입력sido:"+sido_nm);
             System.out.println("###입력area:"+area_nm);
             code = areaRepository.selectSidoCdBySidoNm(sido_nm); //-> 여기에서 쿼리 넣어줘야 함
-            //todo : area_nm 전체가 있는 값으로 인식이 안되는듯 경기 전체를 눌렀을 때 change 로 인식되지 않음 프론트단에서
             if(!area_nm.equals("전체")){
                 code = areaRepository.selectAreaCdByAreaNm(code,area_nm);
             }

@@ -37,14 +37,12 @@ public class OilPriceController {
                 urlBuilder.append("&prodcd="+prod_cd);
                 urlBuilder.append("&cnt=20");
             }else{
-                //TODO:지역필터 걸었을 경우 지역명에 따라 DB 정보에서 코드 찾아오는 작업 필요함
-
                 String sido_cd = areaController.getSidoCdBySidoNm(sido_nm,area_nm);
 
                 urlBuilder.append("?out=json");
                 urlBuilder.append("&code=" + code);
                 urlBuilder.append("&prodcd="+prod_cd);
-                //urlBuilder.append("&area="+sido_cd);
+                urlBuilder.append("&area="+sido_cd);
                 urlBuilder.append("&cnt=20");
             }
 

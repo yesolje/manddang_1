@@ -60,7 +60,7 @@
                             <!-------------------------검색조건--------------------------------------------->
                             <div class="section">
                                 <div class="section-body">
-                                    <div class="form-group row">
+                                    <div class="form-group row my-1">
                                         <label class="col-lg-1 col-form-label">지역</label>
                                         <div class="col-lg-3">
                                             <select class="form-control next_line" name="searchSido" id="searchSido">
@@ -72,18 +72,21 @@
                                         </div>
                                     </div>
                                     <!---->
-                                    <div class="form-group row">
+                                    <div class="form-group row my-1">
                                         <label class="col-lg-1 col-form-label">주유소명</label>
                                         <div class="col-lg-3">
-                                            <input type="text" class="form-control" id="gasStation" name="gasStation" value="" title="" maxlength="" placeholder="주유소명을 입력하세요">
+                                            <input type="text" class="form-control" id="gasStation" name="gasStation" value="" title="" maxlength="" placeholder="아직 주유소명 검색을 지원하지 않습니다">
                                         </div>
                                     </div>
                                     <!---->
-                                    <div class="form-group row">
-                                        <label class="col-lg-1 col-form-label">가격기준</label>
-                                        <div class="col-lg-3">
+                                    <div class="form-group row my-1">
+                                        <label class="col-lg-1 col-form-label">유종</label>
+                                        <div class="col-lg-6 my-1" id="priceSortRadio">
                                             <label for="gasoline">휘발유</label><input type="radio" id="gasoline" name="priceSort" value="B027" checked>
                                             <label for="diesel">경유</label><input type="radio" id="diesel" name="priceSort" value="D047">
+                                            <label for="high-grade-gasoline">고급휘발유</label><input type="radio" id="high-grade-gasoline" name="priceSort" value="B034">
+                                            <label for="indoor-kerosene">실내등유</label><input type="radio" id="indoor-kerosene" name="priceSort" value="C004">
+                                            <label for="butane">자동차부탄</label><input type="radio" id="butane" name="priceSort" value="K015">
                                         </div>
                                     </div>
                                 </div>

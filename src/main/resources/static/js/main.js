@@ -7,7 +7,7 @@
 
  //새로고침할때마다 업데이트되는 유가 데이터
  var oilPriceData;
-
+ var table;
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
@@ -17,14 +17,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     main.initEvent();
     main.initMapLoad();
     common.loadLocationSelectBox();
-
-    //test - 현재 선택되있는 검색조건
-    console.log(document.querySelector("#searchSido").value);
-    console.log(document.querySelector("#searchGungu").value);
-    console.log(document.querySelector('input[name="priceSort"]:checked').value);
-
-    //나중에 유종별로 검색할때 이거 참고
-    //var selectedOil = document.querySelector('input[name="priceSort"]:checked').value;
 
     //화면 로드될때 유가 최초 로드 후 tabulator에 입히기
     oilPriceData = await common.getOilPriceFetch('전체','','B027');
@@ -38,23 +30,23 @@ var main={
         common.headerLoad();
         common.navLoad();
     },
+
     initEvent:function(){
-        //document.getElementById('login').addEventListener("click", function(event){
-        //  document.getElementById('loginForm').submit();
-        //});
-        document.getElementById('searchSido').addEventListener("change", function(event){
+        var filterElements = document.querySelectorAll('#searchGungu, #priceSortRadio');
+        document.querySelector('#searchSido').addEventListener("change", function(event){
             common.loadLocationSelectBox(document.getElementById('searchSido').value);
         });
-        document.getElementById('searchGungu').addEventListener("change", function(event){
-            var sortedOilPriceData;
-            var sido = document.querySelector('#searchSido').value;
-            var gungu = document.querySelector('#searchGungu').value;
-            var oil = document.querySelector('input[name="priceSort"]:checked').value;
-            sortedOilPriceData = common.getOilPriceFetch(sido,gungu,oil);
-            console.log(sortedOilPriceData);
+        filterElements.forEach(function(filterElements) {
+            filterElements.addEventListener("change", async function(event) {
+                var sido = document.querySelector('#searchSido').value;
+                var gungu = document.querySelector('#searchGungu').value;
+                var oil = document.querySelector('input[name="priceSort"]:checked').value;
+                oilPriceData = await common.getOilPriceFetch(sido,gungu,oil);
+                table.replaceData(oilPriceData.RESULT.OIL);
+            });
         });
-
     },
+
     initMapLoad:function(){
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
         let options = { //지도를 생성할 때 필요한 기본 옵션
@@ -65,7 +57,7 @@ var main={
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     },
     initTabulatorLoad:function(){
-        var table = new Tabulator("#listTabulator", {
+        table = new Tabulator("#listTabulator", {
          	data:oilPriceData, //assign data to table
          	layout:"fitColumns", //fit columns to width of table (optional)
          	pagination:true, //enable.
