@@ -13,7 +13,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"  />
     <link rel="stylesheet" type="text/css" href="/css/styles.css"  />
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-
+    <!--proj4js-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.0/proj4.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -32,6 +34,8 @@
     <script type="text/javascript" src="/js/scripts.js"></script>
     <!---->
     <link rel="stylesheet" type="text/css" href="/css/tabulator_bootstrap5.min.css">
+
+
 </head>
 <body class="sb-nav-fixed">
     <input type="hidden" th:value="${info}" id="info">
@@ -49,7 +53,7 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">유가확인</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">유가확인</li>
+                        <li class="breadcrumb-item active">가격은 매일 1시, 2시, 9시, 12시, 16시, 19시에 업데이트 됩니다</li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-header">
