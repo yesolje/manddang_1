@@ -11,11 +11,14 @@
 
  //카카오맵
  var map;
+ //카카오맵 마커
+ var markerArr=[];
+ var markerImage = new kakao.maps.MarkerImage('/images/gas-station_red.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
 
  // proj4js 라이브러리 불러오기
  // Katec 좌표
-    proj4.defs("EPSG:5181", "+proj=tmerc +lat_0=38 +lon_0=128 +k=0.9999 +x_0=400000 +y_0=600000 +ellps=bessel +units=m +no_defs");
-    proj4.defs("EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
+ proj4.defs("EPSG:5181", "+proj=tmerc +lat_0=38 +lon_0=128 +k=0.9999 +x_0=400000 +y_0=600000 +ellps=bessel +units=m +no_defs");
+ proj4.defs("EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
 
 
 /********************************************************************************
@@ -24,7 +27,6 @@
 
 document.addEventListener("DOMContentLoaded", async function(){
     main.initHeaderLoad();
-
     main.initMapLoad();
     common.loadLocationSelectBox();
 
@@ -56,10 +58,8 @@ var main={
             });
         });
         table.on("rowClick", function(e, row){
-            console.log(row.getData().GIS_X_COOR);
-            console.log(row.getData().GIS_Y_COOR);
             var latlng = main.alterKatecToWgs(row.getData().GIS_X_COOR,row.getData().GIS_Y_COOR);
-            main.setSenter(latlng[1],latlng[0]);
+            main.setCenterAndMarker(latlng[1],latlng[0]);
 
         });
     },
@@ -75,11 +75,11 @@ var main={
     },
     initTabulatorLoad:function(){
         table = new Tabulator("#listTabulator", {
-         	data:oilPriceData, //assign data to table
-         	layout:"fitColumns", //fit columns to width of table (optional)
-         	pagination:true, //enable.
-            paginationSize:5, // this option can take any positive integer value
-         	columns:[ //Define Table Columns
+         	data:oilPriceData,
+         	layout:"fitColumns",
+         	pagination:true,
+            paginationSize:5,
+         	columns:[
         	 	{title:"주유소ID", field:"UNI_ID",     visible:false},
         	 	{title:"주유소명",  field:"OS_NM",      tooltip:true, width: "30%"},
         	 	{title:"브랜드",   field:"POLL_DIV_CD",tooltip:true, width: "15%"},
@@ -92,18 +92,30 @@ var main={
         });
     },
 
-    setSenter:function(lat,lng){
-    console.log("여기까지 들어왔어");
-    console.log(lat);
-    console.log(lng);
+    //중간 위치 지정 후 지도마커 표시
+    setCenterAndMarker:function(lat,lng){
     var moveLatLon = new kakao.maps.LatLng(lat,lng);
     map.setCenter(moveLatLon);
-    var marker = new kakao.maps.Marker({
-        position: moveLatLon
-    });
-    marker.setMap(map);
+    main.createMarker(moveLatLon);
     },
 
+    createMarker:function(location){
+        function addMarker(map){
+            for (var i = 0; i < markerArr.length; i++) {
+                markerArr[i].setMap(map);
+            }
+        };
+        var marker = new kakao.maps.Marker({
+            position: location,
+            image:markerImage
+        });
+        addMarker(null);
+        markerArr=[];
+        markerArr.push(marker);
+        addMarker(map);
+    },
+
+    //katec to Wgs 변환 함수
     alterKatecToWgs:function(x,y){
         var katecArr = [];
         katecArr[0] = x;
