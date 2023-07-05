@@ -1,7 +1,7 @@
 package com.yesol.manddang_1.controller;
 
 import com.yesol.manddang_1.service.AreaService;
-import com.yesol.manddang_1.util.OpnetApiUtil;
+import com.yesol.manddang_1.util.ApiUtil;
 import com.yesol.manddang_1.vo.Area;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class AreaController {
         StringBuffer result = new StringBuffer();
         String strResult = "";
         String code="F211229279";
-        OpnetApiUtil op = new OpnetApiUtil();
+        ApiUtil op = new ApiUtil();
 
         try {
             // URL 설정

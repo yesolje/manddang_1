@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class OpnetApiUtil {
+public class ApiUtil {
 
     // 오피넷과 통신하여 데이터를 받아온다
     // 매개변수 - url 주소

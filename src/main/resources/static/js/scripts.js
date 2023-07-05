@@ -181,5 +181,22 @@ const common = {
         }catch(error){
             console.log("유가정보 수신중 에러 발생",error);
         }
+    },
+
+    //google geocoding 을 이용한 비동기식 주소-> 위경도 변환기
+    getLatLngToAdr: function(adr){
+        let filter = {
+            address:adr
+        }
+        try{
+            const response = fetch("/getLatLng",{
+                method:"POST",
+                body:JSON.stringify(filter),
+                headers:{'Content-Type':'application/json'},
+            });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("위경도 수신중 에러 발생",error);
+        }
     }
 }

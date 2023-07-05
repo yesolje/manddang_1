@@ -15,12 +15,6 @@
  var markerArr=[];
  var markerImage = new kakao.maps.MarkerImage('/images/gas-station_red.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
 
- // proj4js 라이브러리 불러오기
- // Katec 좌표
- proj4.defs("EPSG:5181", "+proj=tmerc +lat_0=38 +lon_0=128 +k=0.9999 +x_0=400000 +y_0=600000 +ellps=bessel +units=m +no_defs");
- proj4.defs("EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
-
-
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
@@ -57,10 +51,11 @@ var main={
                 table.replaceData(oilPriceData.RESULT.OIL);
             });
         });
-        table.on("rowClick", function(e, row){
-            var latlng = main.alterKatecToWgs(row.getData().GIS_X_COOR,row.getData().GIS_Y_COOR);
-            main.setCenterAndMarker(latlng[1],latlng[0]);
-
+        table.on("rowClick", async function(e, row){
+            var myAddress = row.getData().NEW_ADR;
+            var geo;
+            geo = await common.getLatLngToAdr(myAddress);
+            main.setCenterAndMarker(geo.latitude,geo.longitude);
         });
     },
 
@@ -115,14 +110,6 @@ var main={
         addMarker(map);
     },
 
-    //katec to Wgs 변환 함수
-    alterKatecToWgs:function(x,y){
-        var katecArr = [];
-        katecArr[0] = x;
-        katecArr[1] = y;
-        var wgs84Coords = proj4("EPSG:5181", "EPSG:4326", katecArr);
-        return wgs84Coords;
-    },
 
 }
 

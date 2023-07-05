@@ -1,6 +1,6 @@
 package com.yesol.manddang_1.controller;
 
-import com.yesol.manddang_1.util.OpnetApiUtil;
+import com.yesol.manddang_1.util.ApiUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class OilPriceController {
     //유가정보 조회
     @RequestMapping(value = "/search/getOilPrice", produces ="application/json")
     public ResponseEntity<?> getOilPrice(@RequestBody Object filter) {
-        OpnetApiUtil op = new OpnetApiUtil();
+        ApiUtil op = new ApiUtil();
         String strResult = ""; //api 데이터 들어감
         String area =""; //db에서 찾아온 지역 코드 들어감
         String code="F211229279";
