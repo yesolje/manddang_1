@@ -15,6 +15,30 @@
  var markerArr=[];
  var markerImage = new kakao.maps.MarkerImage('/images/gas-station_red.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
 
+ var content = '<div class ="wrap">'+
+                        '<div class="title">'+
+                            '<div class="title-name">'+
+                            '0000주유소'+
+                            '</div>'+
+                            '<button class="close-button">X</button>'+
+                        '</div>'+
+                        '<div class="contents">'+
+                            '<ul class="info-ul">'+
+                                '<li>주소 : 경기도 성남시 분당구</li>' +
+                                '<li>브랜드 : SK 주유소</li>' +
+                                '<li>전화번호 : 031-123-4567 </li>' +
+                                '<li>세차장 : 있음 </li>' +
+                                '<li>휘발유 : 999원 </li>' +
+                                '<li>경유 : 999원 </li>' +
+                                '<li>고급휘발유 : 999원 </li>' +
+                            '</ul>'+
+                            '<div class="manage-buttons">'+
+                                '<button class="manage-button">찜하기</button>'+
+                                '<button class="manage-button">가격알림</button>'+
+                            '</div>'+
+                        '</div>'+
+                '</div>';
+
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
@@ -90,11 +114,12 @@ var main={
     //중간 위치 지정 후 지도마커 표시
     setCenterAndMarker:function(lat,lng){
     var moveLatLon = new kakao.maps.LatLng(lat,lng);
+    var overlayLatLon = new kakao.maps.LatLng(lat+0.0003,lng+0.002);
     map.setCenter(moveLatLon);
-    main.createMarker(moveLatLon);
+    main.createMarker(moveLatLon,overlayLatLon);
     },
 
-    createMarker:function(location){
+    createMarker:function(location,overlayLocation){//중심좌표, 오버레이위치
         function addMarker(map){
             for (var i = 0; i < markerArr.length; i++) {
                 markerArr[i].setMap(map);
@@ -104,6 +129,11 @@ var main={
             position: location,
             image:markerImage
         });
+        var customOverlay = new kakao.maps.CustomOverlay({
+            position: overlayLocation,
+            content: content
+        });
+        customOverlay.setMap(map);
         addMarker(null);
         markerArr=[];
         markerArr.push(marker);

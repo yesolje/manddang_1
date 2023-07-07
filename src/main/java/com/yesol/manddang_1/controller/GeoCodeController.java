@@ -18,7 +18,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class GeoCodeController {
 
-    @RequestMapping(value="/getLatLng", produces="application/json")
+    @RequestMapping(value="/getLatLng", produces="application/json")//restcontroller 시에 필요 없음 produces는
     public ResponseEntity<?> getLatLng(@RequestBody Object filter){
         String apiKey = "AIzaSyDnWb62ygXw4GyLIT315CRB52qqLNT8NFI";
         HashMap<String,String> filterMap = (HashMap)filter;
