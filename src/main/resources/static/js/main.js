@@ -9,35 +9,17 @@
  var oilPriceData;
  var table;
 
- //카카오맵
+ //카카오맵,마커,오버레이 관련 객체
  var map;
- //카카오맵 마커
+ var marker;
  var markerArr=[];
- var markerImage = new kakao.maps.MarkerImage('/images/gas-station_red.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
+ var markerImage = new kakao.maps.MarkerImage('/images/gas-station_green.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
+ var mapOverlay;
 
- var content = '<div class ="wrap">'+
-                        '<div class="title">'+
-                            '<div class="title-name">'+
-                            '0000주유소'+
-                            '</div>'+
-                            '<button class="close-button">X</button>'+
-                        '</div>'+
-                        '<div class="contents">'+
-                            '<ul class="info-ul">'+
-                                '<li>주소 : 경기도 성남시 분당구</li>' +
-                                '<li>브랜드 : SK 주유소</li>' +
-                                '<li>전화번호 : 031-123-4567 </li>' +
-                                '<li>세차장 : 있음 </li>' +
-                                '<li>휘발유 : 999원 </li>' +
-                                '<li>경유 : 999원 </li>' +
-                                '<li>고급휘발유 : 999원 </li>' +
-                            '</ul>'+
-                            '<div class="manage-buttons">'+
-                                '<button class="manage-button">찜하기</button>'+
-                                '<button class="manage-button">가격알림</button>'+
-                            '</div>'+
-                        '</div>'+
-                '</div>';
+ //객체_주유소 상세정보
+ var stationDetailInfo;
+
+
 
 /********************************************************************************
  * Document Ready
@@ -76,9 +58,13 @@ var main={
             });
         });
         table.on("rowClick", async function(e, row){
-            var myAddress = row.getData().NEW_ADR;
+            var clickedAddress = row.getData().NEW_ADR;
+            var clickedStationId = row.getData().UNI_ID;
             var geo;
-            geo = await common.getLatLngToAdr(myAddress);
+            geo = await common.getLatLngToAdr(clickedAddress);//주유소 위경도좌표
+            stationDetailInfo = await common.getStationDetailInfo(clickedStationId);//주유소 상세정보
+            stationDetailInfo = stationDetailInfo.RESULT.OIL[0];
+            stationDetailInfo = main.addOilPriceInStationDetailInfo(stationDetailInfo);
             main.setCenterAndMarker(geo.latitude,geo.longitude);
         });
     },
@@ -120,26 +106,73 @@ var main={
     },
 
     createMarker:function(location,overlayLocation){//중심좌표, 오버레이위치
+        if(typeof mapOverlay !== 'undefined'){
+            main.closeOverlay();
+        }
         function addMarker(map){
             for (var i = 0; i < markerArr.length; i++) {
                 markerArr[i].setMap(map);
             }
         };
-        var marker = new kakao.maps.Marker({
+        marker = new kakao.maps.Marker({
             position: location,
             image:markerImage
         });
-        var customOverlay = new kakao.maps.CustomOverlay({
+
+        var overlayContent = `
+         <div class ="wrap">
+             <div class="title">
+                 <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
+                 <button class="close-button" onclick="main.closeOverlay()">X</button>
+             </div>
+             <div class="contents">
+                 <ul class="info-ul">
+                     <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
+                     <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
+                     <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
+                     <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
+                     <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
+                     <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
+                     <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
+                 </ul>
+                 <div class="manage-buttons">
+                     <button class="manage-button link-primary">찜하기</button>
+                     <button class="manage-button link-primary">가격알림</button>
+                 </div>
+             </div>
+        </div>
+         `;
+
+        mapOverlay = new kakao.maps.CustomOverlay({
             position: overlayLocation,
-            content: content
+            content: overlayContent
         });
-        customOverlay.setMap(map);
+        mapOverlay.setMap(map);
         addMarker(null);
         markerArr=[];
         markerArr.push(marker);
         addMarker(map);
     },
 
+    //지도 오버레이창 끄기
+    closeOverlay:function(){
+        mapOverlay.setMap(null);
+    },
+
+    //주유소 상세정보에서 유가 정보는 따로 빼서 객체에 넣기
+    addOilPriceInStationDetailInfo:function(stationDetailInfo){
+        Object.assign(stationDetailInfo,{B027:'',D047:'',B034:''});
+        for(var i=0;i<stationDetailInfo.OIL_PRICE.length;i++){
+            if(stationDetailInfo.OIL_PRICE[i].PRODCD =='B027'){
+                stationDetailInfo.B027 = stationDetailInfo.OIL_PRICE[i].PRICE;
+            }else if(stationDetailInfo.OIL_PRICE[i].PRODCD =='D047'){
+                stationDetailInfo.D047 = stationDetailInfo.OIL_PRICE[i].PRICE;
+            }else if(stationDetailInfo.OIL_PRICE[i].PRODCD =='B034'){
+                stationDetailInfo.B034 = stationDetailInfo.OIL_PRICE[i].PRICE;
+            }
+        }
+        return stationDetailInfo;
+    },
 
 }
 

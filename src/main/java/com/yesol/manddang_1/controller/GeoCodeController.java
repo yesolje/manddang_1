@@ -44,7 +44,6 @@ public class GeoCodeController {
 
                 strResult = jsonObject.toJSONString();
 
-                System.out.println("위도: " + latitude + ", 경도: " + longitude);
             } else {
                 System.out.println("주소 변환 실패");
             }

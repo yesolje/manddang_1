@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URL;
 import java.util.HashMap;
 
-//지역 등록 겸 테스트를 위한 임시 컨트롤러 페이지
+//이 컨트롤러는 오피넷의 API 와 통신하여 정보를 클라이언트로 전달합니다.
 @RestController
 @RequiredArgsConstructor
 public class OilPriceController {
@@ -57,6 +57,27 @@ public class OilPriceController {
         return res;
     }
 
-
+    @RequestMapping(value="/getStationDetailInfo", produces="application/json")
+    public ResponseEntity getStationDetailInfo(@RequestBody Object filter){
+        ApiUtil op = new ApiUtil();
+        String strResult = ""; //api 데이터 들어감
+        String code="F211229279";
+        HashMap<String,String> filterMap = (HashMap)filter;
+        String id = filterMap.get("id");
+        try {
+            // URL 설정
+            StringBuilder urlBuilder = new StringBuilder("http://www.opinet.co.kr/api/detailById.do");
+            urlBuilder.append("?out=json");
+            urlBuilder.append("&code=" + code);
+            urlBuilder.append("&id="+id);
+            URL url = new URL(urlBuilder.toString());
+            strResult = op.ApiDataCall(url);
+            strResult = op.replaceBrandCdToName(strResult);
+        } catch ( Exception e ){
+            e.printStackTrace();
+        }
+        ResponseEntity res = new ResponseEntity<>(strResult, HttpStatus.OK);
+        return res;
+    }
     
 }

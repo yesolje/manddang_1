@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', event => {
  * common js 설정
  ********************************************************************************/
 const common = {
+
     //headerLoad : 세션의 유무에 따라 다른 header 를 html load 해온다.
     headerLoad: function(){
         let info = document.querySelector('#info').value;
@@ -164,7 +165,6 @@ const common = {
     },
 
     //비동기 유가정보 데이터 호출
-    //사용방법 :
     getOilPriceFetch:function(sido,gungu,oil){
         let filter = {
             sido_nm:sido,
@@ -198,5 +198,22 @@ const common = {
         }catch(error){
             console.log("위경도 수신중 에러 발생",error);
         }
-    }
+    },
+
+    getStationDetailInfo : function(stationId){
+        let filter = {
+            id:stationId
+        }
+        try{
+            const response = fetch("/getStationDetailInfo",{
+                method:"POST",
+                body:JSON.stringify(filter),
+                headers:{'Content-Type':'application/json'},
+            });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("주유소 상세정보 수신중 에러 발생",error);
+        }
+    },
+
 }
