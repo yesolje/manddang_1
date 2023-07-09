@@ -45,6 +45,11 @@ var main={
 
     initEvent:function(){
         var filterElements = document.querySelectorAll('#searchGungu, #priceSortRadio');
+        document.querySelector('#searchByName').addEventListener("click",function(event){
+           /* var name = document.querySelector('#gasStation').value;
+            oilPriceData = await common.getStationByName(name);
+            table.replaceData(oilPriceData.RESULT.OIL);*/
+        });
         document.querySelector('#searchSido').addEventListener("change", function(event){
             common.loadLocationSelectBox(document.getElementById('searchSido').value);
         });

@@ -215,5 +215,22 @@ const common = {
             console.log("주유소 상세정보 수신중 에러 발생",error);
         }
     },
-
+    //주유소명으로 주유소 정보 상세 호출
+    getStationByName:function(sido,gungu,oil){
+        let filter = {
+            sido_nm:sido,
+            area_nm:gungu,
+            prod_cd:oil
+            }
+        try{
+            const response = fetch("/search/getOilPrice",{
+                method:"POST",
+                body:JSON.stringify(filter),
+                headers:{'Content-Type': 'application/json'},
+                });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("유가정보 수신중 에러 발생",error);
+        }
+    },
 }
