@@ -2,11 +2,9 @@
 2023-07-10 document 최초작성 (수정중)<br/><br/>
 
 <h2>프로젝트 주제</h2>
->
 전국의 주유소 유가정보 / 내가 찜한 주유소 확인이 가능한 웹사이트<br/><br/>
 
 <h2>기술스택</h2>
->
 Backend: Spring boot Framework , Spring Spring Security, java 11<br/>
 Frontend: Javascript(ES6)<br/>
 Web Server: Apache Tomcat<br/>
@@ -15,7 +13,6 @@ Template: Thymeleaf<br/>
 Database: mariaDB<br/><br/>
 
 <h2>주요기능</h2>
->
 * 일반사용자_전국 시도별/유종별 주유소 유가 확인<br/>
 * 일반사용자_전국 시도별/유종별 주유소 유가 통계(chart) <br/>
 * 일반사용자_자주 가는 주유소 관리<br/>
