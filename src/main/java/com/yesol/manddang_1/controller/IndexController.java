@@ -65,7 +65,6 @@ public class IndexController {
         return mav;
     }
 
-
     //로그인 실패(직접호출불가)
     @GetMapping("/login_fail")
     public String loginFail() {
@@ -80,5 +79,15 @@ public class IndexController {
         return mav;
     }
 
+    //로그인 성공
+    @GetMapping("/jjim/user")
+    public ModelAndView jjimlist(Model model, Authentication authentication) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/jjim");
+        //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
+        User userVo = (User) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        model.addAttribute("info", userVo.getUserId() );      //유저 아이디
+        return mav;
+    }
     
 }

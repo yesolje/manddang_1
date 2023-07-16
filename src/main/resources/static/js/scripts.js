@@ -101,7 +101,7 @@ const common = {
                 +       "<a class='nav-link' href='index.html'>"
                 +           "<div class='sb-nav-link-icon'><i class='fas fa-tachometer-alt'></i></div>유가통계"
                 +       "</a>"
-                +       "<a class='nav-link' href='index.html'>"
+                +       "<a class='nav-link' href='/jjim/user'>"
                 +           "<div class='sb-nav-link-icon'><i class='fas fa-tachometer-alt'></i></div>찜목록"
                 +       "</a>"
                 +   "</div>"
@@ -215,6 +215,7 @@ const common = {
             console.log("주유소 상세정보 수신중 에러 발생",error);
         }
     },
+
     //주유소명으로 주유소 정보 상세 호출
     getStationByName:function(sido,gungu,oil){
         let filter = {
@@ -231,6 +232,23 @@ const common = {
             return response.then(res=>res.json());
         }catch(error){
             console.log("유가정보 수신중 에러 발생",error);
+        }
+    },
+
+    //일반회원 주유소 찜하기
+    postStationIdToJjim:function(stationId){
+        let data = {
+            uni_id:stationId
+        }
+        try{
+            const response = fetch("/postStationId",{
+                method:"POST",
+                body:JSON.stringify(data),
+                headers:{'Content-Type': 'application/json'},
+                });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("주유소 찜하기 중 에러 발생",error);
         }
     },
 }

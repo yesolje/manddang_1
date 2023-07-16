@@ -1,5 +1,5 @@
 /**-----------------------------------------------------------------------------------------
- * Description : main.js
+ * Description : jjim.js
  **----------------------------------------------------------------------------------------*/
 /********************************************************************************
  * Global Variable : 전역변수 정의
@@ -26,44 +26,20 @@
  ********************************************************************************/
 
 document.addEventListener("DOMContentLoaded", async function(){
-    main.initHeaderLoad();
-    main.initMapLoad();
-    common.loadLocationSelectBox();
+    jjim.initHeaderLoad();
+    jjim.initMapLoad();
 
-    //화면 로드될때 유가 최초 로드 후 tabulator에 입히기
-    oilPriceData = await common.getOilPriceFetch('전체','','B027');
-    oilPriceData = oilPriceData.RESULT.OIL;
-    main.initTabulatorLoad();
-    main.initEvent();
+    jjim.initTabulatorLoad();
+    jjim.initEvent();
 });
 
-var main={
+var jjim={
     initHeaderLoad : function(){
         common.headerLoad();
         common.navLoad();
     },
 
     initEvent:function(){
-        var filterElements = document.querySelectorAll('#searchGungu, #priceSortRadio');
-        document.querySelector('#searchByName').addEventListener("click",function(event){
-            alert("아직 지원하지 않는 기능입니다.");
-            //TODO : 이름으로 검색시에 가격이 안나오는 api 한계. 나중에 손 볼것
-           /* var name = document.querySelector('#gasStation').value;
-            oilPriceData = await common.getStationByName(name);
-            table.replaceData(oilPriceData.RESULT.OIL);*/
-        });
-        document.querySelector('#searchSido').addEventListener("change", function(event){
-            common.loadLocationSelectBox(document.getElementById('searchSido').value);
-        });
-        filterElements.forEach(function(filterElements) {
-            filterElements.addEventListener("change", async function(event) {
-                var sido = document.querySelector('#searchSido').value;
-                var gungu = document.querySelector('#searchGungu').value;
-                var oil = document.querySelector('input[name="priceSort"]:checked').value;
-                oilPriceData = await common.getOilPriceFetch(sido,gungu,oil);
-                table.replaceData(oilPriceData.RESULT.OIL);
-            });
-        });
         table.on("rowClick", async function(e, row){
             var clickedAddress = row.getData().NEW_ADR;
             var clickedStationId = row.getData().UNI_ID;
@@ -71,8 +47,8 @@ var main={
             geo = await common.getLatLngToAdr(clickedAddress);//주유소 위경도좌표
             stationDetailInfo = await common.getStationDetailInfo(clickedStationId);//주유소 상세정보
             stationDetailInfo = stationDetailInfo.RESULT.OIL[0];
-            stationDetailInfo = main.addOilPriceInStationDetailInfo(stationDetailInfo);
-            main.setCenterAndMarker(geo.latitude,geo.longitude);
+            stationDetailInfo = jjim.addOilPriceInStationDetailInfo(stationDetailInfo);
+            jjim.setCenterAndMarker(geo.latitude,geo.longitude);
         });
     },
 
@@ -90,7 +66,7 @@ var main={
          	data:oilPriceData,
          	layout:"fitColumns",
          	pagination:true,
-            paginationSize:5,
+            paginationSize:20,
          	columns:[
         	 	{title:"주유소ID", field:"UNI_ID",     visible:false},
         	 	{title:"주유소명",  field:"OS_NM",      tooltip:true, width: "30%"},
@@ -109,12 +85,12 @@ var main={
     var moveLatLon = new kakao.maps.LatLng(lat,lng);
     var overlayLatLon = new kakao.maps.LatLng(lat+0.0003,lng+0.002);
     map.setCenter(moveLatLon);
-    main.createMarker(moveLatLon,overlayLatLon);
+    jjim.createMarker(moveLatLon,overlayLatLon);
     },
 
     createMarker:function(location,overlayLocation){//중심좌표, 오버레이위치
         if(typeof mapOverlay !== 'undefined'){
-            main.closeOverlay();
+            jjim.closeOverlay();
         }
         function addMarker(map){
             for (var i = 0; i < markerArr.length; i++) {
@@ -127,29 +103,28 @@ var main={
         });
 
         var overlayContent = `
-                   <div class ="wrap">
-                       <div class="title">
-                           <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
-                           <button class="close-button" onclick="main.closeOverlay()">X</button>
-                       </div>
-                       <div class="contents">
-                           <input type="hidden" id="stationUniId" value=${stationDetailInfo.UNI_ID}>
-                           <ul class="info-ul">
-                               <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
-                               <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
-                               <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
-                               <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
-                               <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
-                               <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
-                               <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
-                           </ul>
-                           <div class="manage-buttons">
-                               <button class="manage-button link-primary" onclick="main.addJjimlist()">찜하기</button>
-                               <button class="manage-button link-primary" onclick="main.alertPrice()">가격알림</button>
-                           </div>
-                       </div>
-                  </div>
-                   `;
+         <div class ="wrap">
+             <div class="title">
+                 <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
+                 <button class="close-button" onclick="jjim.closeOverlay()">X</button>
+             </div>
+             <div class="contents">
+                 <ul class="info-ul">
+                     <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
+                     <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
+                     <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
+                     <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
+                     <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
+                     <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
+                     <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
+                 </ul>
+                 <div class="manage-buttons">
+                     <button class="manage-button link-primary">찜하기</button>
+                     <button class="manage-button link-primary">가격알림</button>
+                 </div>
+             </div>
+        </div>
+         `;
 
         mapOverlay = new kakao.maps.CustomOverlay({
             position: overlayLocation,
@@ -182,20 +157,5 @@ var main={
         return stationDetailInfo;
     },
 
-    addJjimlist:async function(){
-        var uniId = document.querySelector('#stationUniId').value;
-        if(info == 'none'){
-            alert("로그인 후 이용해주세요");
-            window.location.href = '/login';
-        }else{
-            var message = "";
-            message = await common.postStationIdToJjim(uniId);
-            alert("찜이 성공적으로 등록되었습니다.");
-        }
-    },
-
-    alertPrice:function(){
-        alert("아직 지원하지 않는 기능입니다.");
-    }
 }
 

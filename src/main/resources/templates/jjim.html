@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="#">
+    <title>만땅! - 전국 주유소 가격비교</title>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"  />
+    <link rel="stylesheet" type="text/css" href="/css/styles.css"  />
+
+    <link rel="stylesheet" type="text/css" href="/css/mapOverlay.css"  />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+
+    <!--kakao map-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2655f50cb1af7a42b707f072a111beb"></script>
+
+    <!--tabulator-->
+    <link href="https://unpkg.com/tabulator-tables@5.4.2/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.2/dist/js/tabulator.min.js"></script>
+
+    <!--page manage-->
+    <script type="text/javascript" src="/js/locationData.js"></script>
+    <script type="text/javascript" src="/js/jjim.js"></script>
+    <script type="text/javascript" src="/js/scripts.js"></script>
+    <!---->
+    <link rel="stylesheet" type="text/css" href="/css/tabulator_bootstrap5.min.css">
+
+
+</head>
+<body class="sb-nav-fixed">
+    <input type="hidden" th:value="${info}" id="info">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" id="headerMenu">
+        <!--메뉴구성 : common.headerLoad-->
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <!--메뉴구성 : common.navLoad-->
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">찜목록</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active"><span th:text="${info}"></span>님의 찜목록입니다.</li>
+                    </ol>
+                    <div class="row">
+
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-list me-1"></i>
+                                    리스트
+                                </div>
+                                <div class="card-body">
+                                    <!-------------------------------------------------------------------->
+                                    <div id="listTabulator" class="table"></div>
+                                    <!-------------------------------------------------------------------->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-map me-1"></i>
+                                    지도
+                                </div>
+                                <div class="card-body">
+                                    <!-------------------------------------------------------------------->
+                                    <div id="map" class="map" ></div>
+                                    <!-------------------------------------------------------------------->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
