@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +37,16 @@ public class JjimService {
             logger.error("JjimService.save ERROR :{}",e);
         }
         return result;
+    }
+    
+    //유저아이디로 찜한 주유소 목록 찾기
+    public List getUniIdsByUserId(String user_name){
+        List<Jjim> uniIdList = new ArrayList<>();
+        try{
+            uniIdList = jjimRepository.findByUserId(user_name);
+        }catch(Exception e){
+            logger.error("JjimService.getUniIdsByUserId ERROR :{}",e);
+        }
+        return uniIdList;
     }
 }

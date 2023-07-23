@@ -200,6 +200,7 @@ const common = {
         }
     },
 
+    //주유소 ID로 주유소 정보 상세 호출
     getStationDetailInfo : function(stationId){
         let filter = {
             id:stationId
@@ -216,13 +217,13 @@ const common = {
         }
     },
 
-    //주유소명으로 주유소 정보 상세 호출
+    //TODO : 주유소명으로 주유소 정보 상세 호출
     getStationByName:function(sido,gungu,oil){
         let filter = {
             sido_nm:sido,
             area_nm:gungu,
             prod_cd:oil
-            }
+        }
         try{
             const response = fetch("/search/getOilPrice",{
                 method:"POST",
@@ -251,4 +252,19 @@ const common = {
             console.log("주유소 찜하기 중 에러 발생",error);
         }
     },
+
+    //유저정보로 찜한 주유소의 정보 가져오기
+    getStationDetailInfosByUserId : function(){
+        try{
+            const response = fetch("/getStationDetailInfosByUserId",{
+                method:"POST",
+                headers:{'Content-Type':'application/json'},
+            });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("주유소 상세정보 수신중 에러 발생",error);
+        }
+    },
+
+
 }

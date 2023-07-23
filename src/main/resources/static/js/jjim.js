@@ -5,7 +5,7 @@
  * Global Variable : 전역변수 정의
  ********************************************************************************/
 
- //새로고침할때마다 업데이트되는 유가 데이터
+ //사용자가 찜한 주유소의 정보
  var oilPriceData;
  var table;
 
@@ -19,16 +19,18 @@
  //객체_주유소 상세정보
  var stationDetailInfo;
 
-
-
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
 
 document.addEventListener("DOMContentLoaded", async function(){
     jjim.initHeaderLoad();
-    jjim.initMapLoad();
 
+
+    oilPriceData = await common.getStationDetailInfosByUserId();
+    console.log(oilPriceData);
+
+    jjim.initMapLoad();
     jjim.initTabulatorLoad();
     jjim.initEvent();
 });
@@ -41,14 +43,14 @@ var jjim={
 
     initEvent:function(){
         table.on("rowClick", async function(e, row){
-            var clickedAddress = row.getData().NEW_ADR;
+            /*var clickedAddress = row.getData().NEW_ADR;
             var clickedStationId = row.getData().UNI_ID;
             var geo;
             geo = await common.getLatLngToAdr(clickedAddress);//주유소 위경도좌표
             stationDetailInfo = await common.getStationDetailInfo(clickedStationId);//주유소 상세정보
             stationDetailInfo = stationDetailInfo.RESULT.OIL[0];
             stationDetailInfo = jjim.addOilPriceInStationDetailInfo(stationDetailInfo);
-            jjim.setCenterAndMarker(geo.latitude,geo.longitude);
+            jjim.setCenterAndMarker(geo.latitude,geo.longitude);*/
         });
     },
 
@@ -68,14 +70,13 @@ var jjim={
          	pagination:true,
             paginationSize:20,
          	columns:[
-        	 	{title:"주유소ID", field:"UNI_ID",     visible:false},
-        	 	{title:"주유소명",  field:"OS_NM",      tooltip:true, width: "30%"},
-        	 	{title:"브랜드",   field:"POLL_DIV_CD",tooltip:true, width: "15%"},
-        	 	{title:"가격(원)", field:"PRICE",      width: "15%"},
-        	 	{title:"주소",    field:"NEW_ADR",    tooltip:true,width: "40%"},
-                {title:"구주소",   field:"VAN_ADR",    visible:false},
-                {title:"GIS X좌표", field:"GIS_X_COOR", visible:false},
-                {title:"GIS Y좌표", field:"GIS_Y_COOR", visible:false},
+
+        	 	{title:"주유소ID", field:"UNI_ID",               visible:false},
+        	 	{title:"주유소명",  field:"OS_NM",               tooltip:true, width: "30%"},
+        	 	{title:"브랜드",   field:"POLL_DIV_CO",          tooltip:true, width: "15%"},
+        	 	{title:"주소",     field:"NEW_ADR",              tooltip:true,width: "40%"},
+                {title:"구주소",   field:"VAN_ADR",               visible:false},
+                {title:"관리",     formatter:jjim.buttonFormatter,  width: "15%"},
          	],
         });
     },
@@ -155,6 +156,16 @@ var jjim={
             }
         }
         return stationDetailInfo;
+    },
+
+    //list tabulator row 관리 버튼 함수
+    buttonFormatter:function(cell, formatterParams, onRendered){
+        return '<button class="btn btn-danger" onclick="jjim.handleButtonClick(\'' + cell.getData().UNI_ID+ '\')">삭제</button>';
+    },
+
+    //TODO : 아직 삭제 안됨
+    handleButtonClick:function(uni_id){
+        alert(uni_id + "를 정말 삭제하시겠습니까?");
     },
 
 }

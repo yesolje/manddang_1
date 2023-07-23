@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,5 +53,36 @@ public class GeoCodeController {
         }
         ResponseEntity res = new ResponseEntity<>(strResult, HttpStatus.OK);
         return res;
+    }
+
+    public JSONObject getLatLng (JSONObject jsonObj){
+        String apiKey = "AIzaSyDnWb62ygXw4GyLIT315CRB52qqLNT8NFI";
+        String address = (String)jsonObj.get("NEW_ADR");
+
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey(apiKey)
+                .build();
+
+        try {
+            // 주소를 위도와 경도로 변환합니다.
+            GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
+            if (results.length > 0) {
+                LatLng location = results[0].geometry.location;
+                double latitude = location.lat;
+                double longitude = location.lng;
+
+                jsonObj.put("latitude", latitude);
+                jsonObj.put("longitude", longitude);
+
+            } else {
+                System.out.println("주소 변환 실패");
+            }
+        } catch (Exception e) {
+            System.out.println("오류 발생: " + e.getMessage());
+        }
+
+
+
+        return jsonObj;
     }
 }
