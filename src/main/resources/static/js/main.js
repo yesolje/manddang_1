@@ -127,29 +127,29 @@ var main={
         });
 
         var overlayContent = `
-                   <div class ="wrap">
-                       <div class="title">
-                           <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
-                           <button class="close-button" onclick="main.closeOverlay()">X</button>
-                       </div>
-                       <div class="contents">
-                           <input type="hidden" id="stationUniId" value=${stationDetailInfo.UNI_ID}>
-                           <ul class="info-ul">
-                               <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
-                               <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
-                               <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
-                               <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
-                               <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
-                               <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
-                               <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
-                           </ul>
-                           <div class="manage-buttons">
-                               <button class="manage-button link-primary" onclick="main.addJjimlist()">찜하기</button>
-                               <button class="manage-button link-primary" onclick="main.alertPrice()">가격알림</button>
-                           </div>
-                       </div>
-                  </div>
-                   `;
+           <div class ="wrap">
+               <div class="title">
+                   <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
+                   <button class="close-button" onclick="main.closeOverlay()">X</button>
+               </div>
+               <div class="contents">
+                   <input type="hidden" id="stationUniId" value=${stationDetailInfo.UNI_ID}>
+                   <ul class="info-ul">
+                       <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
+                       <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
+                       <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
+                       <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
+                       <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
+                       <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
+                       <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
+                   </ul>
+                   <div class="manage-buttons">
+                       <button class="manage-button link-primary" onclick="main.addJjimlist()">찜하기</button>
+                       <button class="manage-button link-primary" onclick="main.alertPrice()">가격알림</button>
+                   </div>
+               </div>
+          </div>
+           `;
 
         mapOverlay = new kakao.maps.CustomOverlay({
             position: overlayLocation,

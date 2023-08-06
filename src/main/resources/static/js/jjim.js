@@ -10,12 +10,9 @@
  var table;
 
  //카카오맵,마커,오버레이 관련 객체
+ var markerImage = new kakao.maps.MarkerImage('/images/gas-station_green.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
  var map;
  var marker;
- var markerArr=[];
- var markerImage = new kakao.maps.MarkerImage('/images/gas-station_green.png', new kakao.maps.Size(69, 69), {offset: new kakao.maps.Point(27, 69)});
- var mapOverlay;
-
  //객체_주유소 상세정보
  var stationDetailInfo;
 
@@ -29,8 +26,9 @@ document.addEventListener("DOMContentLoaded", async function(){
 
     oilPriceData = await common.getStationDetailInfosByUserId();
     console.log(oilPriceData);
-
+    oilPriceData = jjim.addOilPriceInStationDetailInfo(oilPriceData);
     jjim.initMapLoad();
+    jjim.initMapMarkerLoad();
     jjim.initTabulatorLoad();
     jjim.initEvent();
 });
@@ -43,14 +41,7 @@ var jjim={
 
     initEvent:function(){
         table.on("rowClick", async function(e, row){
-            /*var clickedAddress = row.getData().NEW_ADR;
-            var clickedStationId = row.getData().UNI_ID;
-            var geo;
-            geo = await common.getLatLngToAdr(clickedAddress);//주유소 위경도좌표
-            stationDetailInfo = await common.getStationDetailInfo(clickedStationId);//주유소 상세정보
-            stationDetailInfo = stationDetailInfo.RESULT.OIL[0];
-            stationDetailInfo = jjim.addOilPriceInStationDetailInfo(stationDetailInfo);
-            jjim.setCenterAndMarker(geo.latitude,geo.longitude);*/
+
         });
     },
 
@@ -70,92 +61,73 @@ var jjim={
          	pagination:true,
             paginationSize:20,
          	columns:[
-
         	 	{title:"주유소ID", field:"UNI_ID",               visible:false},
         	 	{title:"주유소명",  field:"OS_NM",               tooltip:true, width: "30%"},
         	 	{title:"브랜드",   field:"POLL_DIV_CO",          tooltip:true, width: "15%"},
         	 	{title:"주소",     field:"NEW_ADR",              tooltip:true,width: "40%"},
                 {title:"구주소",   field:"VAN_ADR",               visible:false},
+                {title:"위도",   field:"latitude",               visible:false},
+                {title:"경도",   field:"longitude",               visible:false},
                 {title:"관리",     formatter:jjim.buttonFormatter,  width: "15%"},
          	],
         });
     },
 
-    //중간 위치 지정 후 지도마커 표시
-    setCenterAndMarker:function(lat,lng){
-    var moveLatLon = new kakao.maps.LatLng(lat,lng);
-    var overlayLatLon = new kakao.maps.LatLng(lat+0.0003,lng+0.002);
-    map.setCenter(moveLatLon);
-    jjim.createMarker(moveLatLon,overlayLatLon);
-    },
+    initMapMarkerLoad:function(){
+        var pointArr = [];
+        for(var i=0;i<oilPriceData.length;i++){
+            var point={
+                latlng : new kakao.maps.LatLng(oilPriceData[i].latitude,oilPriceData[i].longitude),
+                content :
+                `
+                   <div class ="wrap">
+                       <div class="title">
+                           <div class="title-name">${oilPriceData[i].OS_NM}</div>
 
-    createMarker:function(location,overlayLocation){//중심좌표, 오버레이위치
-        if(typeof mapOverlay !== 'undefined'){
-            jjim.closeOverlay();
-        }
-        function addMarker(map){
-            for (var i = 0; i < markerArr.length; i++) {
-                markerArr[i].setMap(map);
+                       </div>
+                       <div class="contents">
+                           <input type="hidden" id="stationUniId" value=${oilPriceData[i].UNI_ID}>
+                           <ul class="info-ul">
+                               <li class="info-li">주소 : ${oilPriceData[i].NEW_ADR}</li>
+                               <li class="info-li">브랜드 : ${oilPriceData[i].POLL_DIV_CO}</li>
+                               <li class="info-li">전화번호 : ${oilPriceData[i].TEL}</li>
+                               <li class="info-li">세차장 : ${oilPriceData[i].CAR_WASH_YN}</li>
+                               <li class="info-li">휘발유 : ${oilPriceData[i].B027}</li>
+                               <li class="info-li">경유 : ${oilPriceData[i].D047}</li>
+                               <li class="info-li">고급휘발유 : ${oilPriceData[i].B034}</li>
+                           </ul>
+                           <div class="manage-buttons">
+                               <button class="manage-button link-primary" onclick="main.alertPrice()">가격알림</button>
+                           </div>
+                       </div>
+                  </div>
+                `
             }
-        };
-        marker = new kakao.maps.Marker({
-            position: location,
-            image:markerImage
-        });
+            pointArr.push(point);
 
-        var overlayContent = `
-         <div class ="wrap">
-             <div class="title">
-                 <div class="title-name"> ${stationDetailInfo.OS_NM}</div>
-                 <button class="close-button" onclick="jjim.closeOverlay()">X</button>
-             </div>
-             <div class="contents">
-                 <ul class="info-ul">
-                     <li class="info-li">주소 : ${stationDetailInfo.NEW_ADR}</li>
-                     <li class="info-li">브랜드 : ${stationDetailInfo.POLL_DIV_CO}</li>
-                     <li class="info-li">전화번호 : ${stationDetailInfo.TEL} </li>
-                     <li class="info-li">세차장 : ${stationDetailInfo.CAR_WASH_YN} </li>
-                     <li class="info-li">휘발유 : ${stationDetailInfo.B027} </li>
-                     <li class="info-li">경유 : ${stationDetailInfo.D047} </li>
-                     <li class="info-li">고급휘발유 : ${stationDetailInfo.B034} </li>
-                 </ul>
-                 <div class="manage-buttons">
-                     <button class="manage-button link-primary">찜하기</button>
-                     <button class="manage-button link-primary">가격알림</button>
-                 </div>
-             </div>
-        </div>
-         `;
-
-        mapOverlay = new kakao.maps.CustomOverlay({
-            position: overlayLocation,
-            content: overlayContent
-        });
-        mapOverlay.setMap(map);
-        addMarker(null);
-        markerArr=[];
-        markerArr.push(marker);
-        addMarker(map);
-    },
-
-    //지도 오버레이창 끄기
-    closeOverlay:function(){
-        mapOverlay.setMap(null);
-    },
-
-    //주유소 상세정보에서 유가 정보는 따로 빼서 객체에 넣기
-    addOilPriceInStationDetailInfo:function(stationDetailInfo){
-        Object.assign(stationDetailInfo,{B027:'',D047:'',B034:''});
-        for(var i=0;i<stationDetailInfo.OIL_PRICE.length;i++){
-            if(stationDetailInfo.OIL_PRICE[i].PRODCD =='B027'){
-                stationDetailInfo.B027 = stationDetailInfo.OIL_PRICE[i].PRICE;
-            }else if(stationDetailInfo.OIL_PRICE[i].PRODCD =='D047'){
-                stationDetailInfo.D047 = stationDetailInfo.OIL_PRICE[i].PRICE;
-            }else if(stationDetailInfo.OIL_PRICE[i].PRODCD =='B034'){
-                stationDetailInfo.B034 = stationDetailInfo.OIL_PRICE[i].PRICE;
-            }
         }
-        return stationDetailInfo;
+        var bounds = new kakao.maps.LatLngBounds();
+        for(var i =0;i<pointArr.length;i++){
+            marker = new kakao.maps.Marker({
+                position : pointArr[i].latlng,
+                map : map,
+                image:markerImage,
+                clickable : true
+            });
+            var infowindow = new kakao.maps.InfoWindow({
+              content: pointArr[i].content, // 인포윈도우에 표시할 내용
+              removable : true //x자가 안예쁨...
+            });
+
+            kakao.maps.event.addListener(marker, 'click', jjim.makeOverListener(map, marker, infowindow));
+            //kakao.maps.event.addListener(marker, 'mouseout', jjim.makeOutListener(infowindow));
+
+
+
+            //marker.setMap(map);
+            bounds.extend(pointArr[i].latlng);
+        }
+        map.setBounds(bounds);
     },
 
     //list tabulator row 관리 버튼 함수
@@ -167,6 +139,39 @@ var jjim={
     handleButtonClick:function(uni_id){
         alert(uni_id + "를 정말 삭제하시겠습니까?");
     },
+
+    //인포윈도우 켜짐
+    makeOverListener: function(map, marker, infowindow) {
+        return function() {
+            infowindow.open(map, marker);
+            infowindow.Xh.parentElement.querySelector("img").src='../images/close.png';
+        };
+    },
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+    makeOutListener: function(infowindow) {
+        return function() {
+            infowindow.close();
+        };
+    },
+
+    addOilPriceInStationDetailInfo:function(oilPriceData){
+
+        for(var i=0;i<oilPriceData.length;i++){
+            Object.assign(oilPriceData[i],{B027:'',D047:'',B034:''});
+            for(var j=0;j<oilPriceData[i].OIL_PRICE.length;j++){
+                if(oilPriceData[i].OIL_PRICE[j].PRODCD =='B027'){
+                    oilPriceData[i].B027 = oilPriceData[i].OIL_PRICE[j].PRICE;
+                }else if(oilPriceData[i].OIL_PRICE[j].PRODCD =='D047'){
+                    oilPriceData[i].D047 = oilPriceData[i].OIL_PRICE[j].PRICE;
+                }else if(oilPriceData[i].OIL_PRICE[j].PRODCD =='B034'){
+                    oilPriceData[i].B034 = oilPriceData[i].OIL_PRICE[j].PRICE;
+                }
+            }
+        }
+        return oilPriceData;
+    },
+
 
 }
 
