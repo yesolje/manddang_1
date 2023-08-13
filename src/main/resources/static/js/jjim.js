@@ -16,6 +16,17 @@
  //객체_주유소 상세정보
  var stationDetailInfo;
 
+/*
+function showSpinner() {
+    document.getElementsByClassName('layerPopup')[0].style.display='block';
+}
+function hideSpinner() {
+    document.getElementsByClassName('layerPopup')[0].style.display='none';
+}*/
+
+
+
+
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
