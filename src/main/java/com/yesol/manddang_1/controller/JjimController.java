@@ -20,7 +20,7 @@ public class JjimController {
     private final JjimService JjimService;
 
     @RequestMapping(value = "/postStationId", produces ="application/json")
-    public ResponseEntity<?> getOilPrice(@RequestBody Object data, Principal principal) {
+    public ResponseEntity<?> postStationId(@RequestBody Object data, Principal principal) {
         HashMap<String,String> dataMap = (HashMap)data;
         String uni_id = dataMap.get("uni_id");
 
@@ -33,4 +33,19 @@ public class JjimController {
 
         return res;
     }
+/*
+    @RequestMapping(value = "/deleteStationId", produces ="application/json")
+    public ResponseEntity<?> deleteStationId(@RequestBody Object data, Principal principal) {
+        HashMap<String,String> dataMap = (HashMap)data;
+        String uni_id = dataMap.get("uni_id");
+
+        Jjim jjim = new Jjim();
+        jjim.setUniId(uni_id);
+        jjim.setUserId(principal.getName());
+
+        String resultString = JjimService.delete(jjim);
+        ResponseEntity res = new ResponseEntity<>(resultString, HttpStatus.OK);
+
+        return res;
+    }*/
 }

@@ -38,7 +38,20 @@ public class JjimService {
         }
         return result;
     }
-    
+    //찜삭제
+    /*@Transactional
+    public String delete(final Jjim jjim) {
+        String result = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            result = jjimRepository.delete(jjim);
+
+        } catch(Exception e){
+            logger.error("JjimService.save ERROR :{}",e);
+        }
+        return result;
+    }*/
+
     //유저아이디로 찜한 주유소 목록 찾기
     public List getUniIdsByUserId(String user_name){
         List<Jjim> uniIdList = new ArrayList<>();

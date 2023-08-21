@@ -1,52 +1,47 @@
 package com.yesol.manddang_1.controller;
 
-import com.yesol.manddang_1.service.AreaService;
 import com.yesol.manddang_1.service.UserService;
 import com.yesol.manddang_1.vo.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
-@RestController
 @RequiredArgsConstructor
+@Controller
 public class IndexController {
 
     private final UserService userService;
 
     //메인화면 display
     @RequestMapping("/main")
-    public ModelAndView goMainPage(Model model, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/main");
-        model.addAttribute("info", "none" );      //유저 아이디
-        return mav;
+    public String goMainPage(Model model, HttpServletRequest request) {
+        model.addAttribute("info", "none" );
+        return "main";
     }
 
-    //로그인 성공
+    //로그인 성공 및 세션 정보가 없는 상태에서 /main/user 호출시 redirect
     @GetMapping("/main/user")
-    public ModelAndView loginSuccess(Model model, Authentication authentication) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/main");
-        //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        User userVo = (User) authentication.getPrincipal();  //userDetail 객체를 가져옴
-        model.addAttribute("info", userVo.getUserId() );      //유저 아이디
-        return mav;
+    public String loginSuccess(Model model, Authentication authentication) {
+        if(authentication == null){
+            return "redirect:/login";
+        }else{
+            User userVo = (User) authentication.getPrincipal();
+            model.addAttribute("info", userVo.getUserId() );
+            return "main";
+        }
     }
 
     //회원가입 display
     @RequestMapping("/join")
-    public ModelAndView goJoinPage(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("join");
-        return mav;
+    public String goJoinPage(HttpServletRequest request) {
+        return "join";
     }
 
     //회원가입(직접호출불가)
@@ -59,35 +54,28 @@ public class IndexController {
 
     //로그인 display
     @RequestMapping("/login")
-    public ModelAndView goLoginPage(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("login");
-        return mav;
+    public String goLoginPage() {
+        return "login";
     }
 
     //로그인 실패(직접호출불가)
     @GetMapping("/login_fail")
-    public String loginFail() {
-        return "login_fail";
+    public String loginFail(Model model) {
+        return "redirect:/login?message=false";
     }
 
     //관리자 테스트페이지 display
     @RequestMapping("/adminManage")
-    public ModelAndView goAdminManage(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("adminManage");
-        return mav;
+    public String goAdminManage(HttpServletRequest request) {
+        return "adminManage";
     }
 
-    //로그인 성공
+    //찜목록 가기
     @GetMapping("/jjim/user")
-    public ModelAndView jjimlist(Model model, Authentication authentication) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/jjim");
-        //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        User userVo = (User) authentication.getPrincipal();  //userDetail 객체를 가져옴
-        model.addAttribute("info", userVo.getUserId() );      //유저 아이디
-        return mav;
+    public String jjimlist(Model model, Authentication authentication) {
+        User userVo = (User) authentication.getPrincipal();
+        model.addAttribute("info", userVo.getUserId() );
+        return "/jjim";
     }
     
 }

@@ -16,25 +16,13 @@
  //객체_주유소 상세정보
  var stationDetailInfo;
 
-/*
-function showSpinner() {
-    document.getElementsByClassName('layerPopup')[0].style.display='block';
-}
-function hideSpinner() {
-    document.getElementsByClassName('layerPopup')[0].style.display='none';
-}*/
-
-
-
-
 /********************************************************************************
  * Document Ready
  ********************************************************************************/
 
 document.addEventListener("DOMContentLoaded", async function(){
+    document.getElementsByClassName('layerPopup')[0].style.display='block';
     jjim.initHeaderLoad();
-
-
     oilPriceData = await common.getStationDetailInfosByUserId();
     console.log(oilPriceData);
     oilPriceData = jjim.addOilPriceInStationDetailInfo(oilPriceData);
@@ -42,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     jjim.initMapMarkerLoad();
     jjim.initTabulatorLoad();
     jjim.initEvent();
+    document.getElementsByClassName('layerPopup')[0].style.display='none';
 });
 
 var jjim={
@@ -94,7 +83,6 @@ var jjim={
                    <div class ="wrap">
                        <div class="title">
                            <div class="title-name">${oilPriceData[i].OS_NM}</div>
-
                        </div>
                        <div class="contents">
                            <input type="hidden" id="stationUniId" value=${oilPriceData[i].UNI_ID}>
@@ -126,16 +114,11 @@ var jjim={
                 clickable : true
             });
             var infowindow = new kakao.maps.InfoWindow({
-              content: pointArr[i].content, // 인포윈도우에 표시할 내용
-              removable : true //x자가 안예쁨...
+              content: pointArr[i].content,
+              removable : true
             });
 
             kakao.maps.event.addListener(marker, 'click', jjim.makeOverListener(map, marker, infowindow));
-            //kakao.maps.event.addListener(marker, 'mouseout', jjim.makeOutListener(infowindow));
-
-
-
-            //marker.setMap(map);
             bounds.extend(pointArr[i].latlng);
         }
         map.setBounds(bounds);
@@ -148,7 +131,10 @@ var jjim={
 
     //TODO : 아직 삭제 안됨
     handleButtonClick:function(uni_id){
-        alert(uni_id + "를 정말 삭제하시겠습니까?");
+        var result = confirm(uni_id + "를 찜목록에서 삭제하시겠습니까?");
+        if(result === true){
+            jjim.deleteJjim(uni_id);
+        }
     },
 
     //인포윈도우 켜짐
@@ -167,7 +153,6 @@ var jjim={
     },
 
     addOilPriceInStationDetailInfo:function(oilPriceData){
-
         for(var i=0;i<oilPriceData.length;i++){
             Object.assign(oilPriceData[i],{B027:'',D047:'',B034:''});
             for(var j=0;j<oilPriceData[i].OIL_PRICE.length;j++){
@@ -183,6 +168,20 @@ var jjim={
         return oilPriceData;
     },
 
+    deleteJjim: function(stationId){
+        let data = {
+                uni_id:stationId
+        }
+        try{
+            const response = fetch("/deleteStationId",{
+                method:"POST",
+                headers:{'Content-Type':'application/json'},
+            });
+            return response.then(res=>res.json());
+        }catch(error){
+            console.log("찜주유소 지우기중 에러 발생",error);
+        }
+    },
 
 }
 
